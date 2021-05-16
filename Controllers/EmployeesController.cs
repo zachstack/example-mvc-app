@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ExampleMvcApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
     {
@@ -23,18 +23,15 @@ namespace ExampleMvcApp.Controllers
 
         // GET: api/employees
         [HttpGet]
-        public async Task<IEnumerable<Employee>> Get()
+        public IEnumerable<Employee> GetEmployees(
+            [FromQuery]string name, 
+            [FromQuery(Name = "department_name")] string departmentName,
+            [FromQuery(Name = "sub_department_name")] string subDepartmentName)
         {
-            var employees = await database.Employees.ToListAsync();
+            string query = $"SelectAllEmployees '{name?.Trim()}', '{departmentName?.Trim()}', '{subDepartmentName?.Trim()}'";
+            var employees = database.Employees.FromSqlRaw(query);
 
             return employees;
-        }
-
-        // GET api/<EmployeesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
         }
     }
 }
