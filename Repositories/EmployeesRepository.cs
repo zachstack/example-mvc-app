@@ -9,7 +9,7 @@ namespace ExampleMvcApp.Repositories
 {
     public interface IEmployeesRepository
     {
-        Task<List<Employee>> GetEmployees(string name, string departmentName, string subDepartmentName);
+        Task<List<Employee>> GetEmployees(string name = null, string departmentName = null, string subDepartmentName = null);
     }
 
     public class EmployeesRepository : IEmployeesRepository
@@ -20,7 +20,7 @@ namespace ExampleMvcApp.Repositories
             database = context;
         }
 
-        public async Task<List<Employee>> GetEmployees(string name, string departmentName, string subDepartmentName)
+        public async Task<List<Employee>> GetEmployees(string name = null, string departmentName = null, string subDepartmentName = null)
         {
             //Trim and format string and convert to empty string in cases of null
             name = name?.Trim() ?? "";

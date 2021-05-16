@@ -15,11 +15,11 @@ namespace ExampleMvcApp.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IEmployeesRepository repository;
+        private readonly IEmployeesRepository _repository;
 
         public EmployeesController(IEmployeesRepository rep)
         {
-            repository = rep;
+            _repository = rep;
         }
 
         // GET: api/employees
@@ -30,7 +30,7 @@ namespace ExampleMvcApp.Controllers
             [FromQuery(Name = "sub_department_name")] string subDepartmentName)
         {
             //Get the employees
-            var employees = await repository.GetEmployees(name, departmentName, subDepartmentName);
+            var employees = await _repository.GetEmployees(name, departmentName, subDepartmentName);
 
             return employees;
         }
