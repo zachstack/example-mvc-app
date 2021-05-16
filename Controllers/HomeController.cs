@@ -1,4 +1,5 @@
 ﻿using ExampleMvcApp.Models;
+using ExampleMvcApp.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
