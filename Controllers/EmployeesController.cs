@@ -24,7 +24,7 @@ namespace ExampleMvcApp.Controllers
 
         // GET: api/employees
         [HttpGet]
-        public async Task<IEnumerable<Employee>> GetEmployees(
+        public async Task<IActionResult> GetEmployees(
             [FromQuery]string name, 
             [FromQuery(Name = "department_name")] string departmentName,
             [FromQuery(Name = "sub_department_name")] string subDepartmentName)
@@ -32,7 +32,7 @@ namespace ExampleMvcApp.Controllers
             //Get the employees
             var employees = await _repository.GetEmployees(name, departmentName, subDepartmentName);
 
-            return employees;
+            return Ok(employees);
         }
     }
 }

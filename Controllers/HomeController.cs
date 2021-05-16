@@ -13,12 +13,10 @@ namespace ExampleMvcApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IEmployeesRepository _repository;
 
-        public HomeController(ILogger<HomeController> logger, IEmployeesRepository repo)
+        public HomeController(IEmployeesRepository repo)
         {
-            _logger = logger;
             _repository = repo;
         }
 
@@ -28,7 +26,7 @@ namespace ExampleMvcApp.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
-            return View();
+            return View("Index");
         }
 
         /// <summary>
