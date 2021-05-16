@@ -22,23 +22,48 @@ namespace ExampleMvcApp.Controllers
             _repository = repo;
         }
 
+        /// <summary>
+        /// Returns the view for the Home page.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Returns the view for the Privacy Policy page.
+        /// </summary>
+        /// <remarks>
+        /// Route is /privacy
+        /// </remarks>
+        /// <returns></returns>
         public IActionResult Privacy()
         {
             return View();
         }
 
-        public async Task<IActionResult> Employees()
+        /// <summary>
+        /// Returns the view for the Employeess page. Allows for optional search parameters.
+        /// </summary>
+        /// <remarks>
+        /// Route is /employees
+        /// </remarks>
+        /// <param name="name"></param>
+        /// <param name="departmentName"></param>
+        /// <param name="subDepartmentName"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Employees(string name, string departmentName, string subDepartmentName)
         {
-            var allEmployees = await _repository.GetEmployees();
-            var model = new EmployeeViewModel(allEmployees);
+            var allEmployees = await _repository.GetEmployees(name, departmentName, subDepartmentName);
+            var model = new EmployeeViewModel(allEmployees, name, departmentName, subDepartmentName);
             return View(model);
         }
 
+        /// <summary>
+        /// Returns the view for the Error page.
+        /// </summary>
+        /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

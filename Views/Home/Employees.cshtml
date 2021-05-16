@@ -1,25 +1,43 @@
 ﻿@model ExampleMvcApp.Models.ViewModels.EmployeeViewModel
 @{
     ViewData["Title"] = "Employees";
-   
+
 }
 <h1>@ViewData["Title"]</h1>
 
-@foreach(var employee in Model.Employees)
+<form class="form-inline" asp-controller="Home" asp-action="Employees" method="get">
+    <div class="form-group mx-sm-3 mb-2">
+        <input type="text" class="form-control" placeholder="Employee Name" name="name" maxlength="101" value="@Model.Name">
+        <input type="text" class="form-control" placeholder="Department Name" name="departmentName" maxlength="50" value="@Model.DepartmentName">
+        <input type="text" class="form-control" placeholder="Sub-department Name" name="subDepartmentName" maxlength="50" value="@Model.SubDepartmentName">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Search</button>
+    <a id="resetbutton" class="link-primary" asp-controller="Home" asp-action="Employees">Reset</a>
+</form>
+
+@foreach (var employee in Model.Employees)
 {
-    <hr />
-    <h2>@(employee.FirstName + " " + employee.LastName)</h2>
-    <div class="row">
-        <div class="col-12 col-xl-3">
-            <img class="portrait" src="~/assets/@employee.ProfileImage" />
-            <div id="socialmedia">
-                <a href="@employee.FbprofileLink" class="fa fa-facebook"></a>
-                <a href="@employee.TwitterProfileLink" class="fa fa-twitter"></a>   
+    <div class="card" >
+        <div class="card-body">
+            <h2 class="card-title">@(employee.FirstName + " " + employee.LastName)</h2>
+            <div class="row">
+                <div class="col-12 col-xl-3">
+                    <img class="portrait" src="~/assets/@employee.ProfileImage" />
+                    <div id="socialmedia">
+                        <a href="@employee.FbprofileLink" class="fa fa-facebook"></a>
+                        <a href="@employee.TwitterProfileLink" class="fa fa-twitter"></a>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-9">
+                    <h4>Bio</h4>
+                    @employee.Bio
+                </div>
             </div>
         </div>
-        <div class="col-12 col-xl-9">
-            <h4>Bio</h4>
-            @employee.Bio
-        </div>
     </div>
+    <br />
+}
+@if(Model.Employees.Count == 0)
+{
+    <span>No employees found</span>
 }
