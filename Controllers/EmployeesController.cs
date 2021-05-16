@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExampleMvcApp.Models.Database;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +14,20 @@ namespace ExampleMvcApp.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
+        private readonly ExampleDbContext database;
+
+        public EmployeesController(ExampleDbContext context)
+        {
+            database = context;
+        }
+
         // GET: api/employees
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Employee>> Get()
         {
+            var employees = await database.Employees.ToListAsync();
 
-            return new string[] { "value1", "value2" };
+            return employees;
         }
 
         // GET api/<EmployeesController>/5
