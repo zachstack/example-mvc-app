@@ -1,4 +1,5 @@
 using ExampleMvcApp.Models.Database;
+using ExampleMvcApp.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,8 @@ namespace ExampleMvcApp
         {
             services.AddControllersWithViews();
             services.AddDbContext<ExampleDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ExampleDb")));
+
+            services.AddScoped<IEmployeesRepository, EmployeesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

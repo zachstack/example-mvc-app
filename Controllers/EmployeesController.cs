@@ -1,4 +1,5 @@
 ﻿using ExampleMvcApp.Models.Database;
+using ExampleMvcApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,11 +15,11 @@ namespace ExampleMvcApp.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly ExampleDbContext database;
+        private readonly IEmployeesRepository repository;
 
-        public EmployeesController(ExampleDbContext context)
+        public EmployeesController(IEmployeesRepository rep)
         {
-            database = context;
+            repository = rep;
         }
 
         // GET: api/employees
@@ -28,16 +29,8 @@ namespace ExampleMvcApp.Controllers
             [FromQuery(Name = "department_name")] string departmentName,
             [FromQuery(Name = "sub_department_name")] string subDepartmentName)
         {
-            //Trim and format string and convert to empty string in cases of null
-            name = name?.Trim() ?? "";
-            departmentName = departmentName?.Trim() ?? "";
-            subDepartmentName = subDepartmentName?.Trim() ?? "";
-
-            //Sql query to execute
-            FormattableString query = $"SelectAllEmployees {name}, {departmentName}, {subDepartmentName}";
-
             //Get the employees
-            var employees = await database.Employees.FromSqlInterpolated(query).ToListAsync();
+            var employees = await repository.GetEmployees(name, departmentName, subDepartmentName);
 
             return employees;
         }
