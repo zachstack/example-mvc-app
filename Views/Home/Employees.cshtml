@@ -7,16 +7,19 @@
 
 @foreach(var employee in Model.Employees)
 {
+    <hr />
     <h2>@(employee.FirstName + " " + employee.LastName)</h2>
     <div class="row">
         <div class="col-12 col-xl-3">
-            <img class="portrait" src="~/assets/@employee.ProfileImage"  />
-
+            <img class="portrait" src="~/assets/@employee.ProfileImage" />
+            <div id="socialmedia">
+                <a href="@employee.FbprofileLink" class="fa fa-facebook"></a>
+                <a href="@employee.TwitterProfileLink" class="fa fa-twitter"></a>   
+            </div>
         </div>
         <div class="col-12 col-xl-9">
-            <span>Bio</span>
+            <h4>Bio</h4>
             @employee.Bio
         </div>
     </div>
-    <br/>
 }
