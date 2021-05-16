@@ -23,13 +23,21 @@ namespace ExampleMvcApp.Controllers
 
         // GET: api/employees
         [HttpGet]
-        public IEnumerable<Employee> GetEmployees(
+        public async Task<IEnumerable<Employee>> GetEmployees(
             [FromQuery]string name, 
             [FromQuery(Name = "department_name")] string departmentName,
             [FromQuery(Name = "sub_department_name")] string subDepartmentName)
         {
-            string query = $"SelectAllEmployees '{name?.Trim()}', '{departmentName?.Trim()}', '{subDepartmentName?.Trim()}'";
-            var employees = database.Employees.FromSqlRaw(query);
+            //Trim and format string and convert to empty string in cases of null
+            name = name?.Trim() ?? "";
+            departmentName = departmentName?.Trim() ?? "";
+            subDepartmentName = subDepartmentName?.Trim() ?? "";
+
+            //Sql query to execute
+            FormattableString query = $"SelectAllEmployees {name}, {departmentName}, {subDepartmentName}";
+
+            //Get the employees
+            var employees = await database.Employees.FromSqlInterpolated(query).ToListAsync();
 
             return employees;
         }
