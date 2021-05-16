@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace ExampleMvcApp.Controllers
 {
+    /// <summary>
+    /// API Controller for Database Employees table
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -22,7 +25,16 @@ namespace ExampleMvcApp.Controllers
             _repository = rep;
         }
 
-        // GET: api/employees
+        /// <summary>
+        /// Api endpoint returning a list of Employees. Allows for optional search parameters
+        /// </summary>
+        /// <remarks>
+        /// Route: /api/v1/employees
+        /// </remarks>
+        /// <param name="name"></param>
+        /// <param name="departmentName"></param>
+        /// <param name="subDepartmentName"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetEmployees(
             [FromQuery]string name, 

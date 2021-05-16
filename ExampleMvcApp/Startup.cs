@@ -29,6 +29,7 @@ namespace ExampleMvcApp
             services.AddControllersWithViews();
             services.AddDbContext<ExampleDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ExampleDb")));
 
+            //Add Repository Services
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
         }
 
