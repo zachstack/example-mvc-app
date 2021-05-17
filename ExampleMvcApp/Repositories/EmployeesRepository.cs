@@ -9,6 +9,7 @@ using Dapper;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using ExampleMvcApp.Models;
+using System.Diagnostics;
 
 namespace ExampleMvcApp.Repositories
 {
@@ -18,7 +19,6 @@ namespace ExampleMvcApp.Repositories
     public interface IEmployeesRepository
     {
         Task<List<Employee>> GetEmployees(string name = null, string departmentName = null, string subDepartmentName = null);
-        Task<List<Employee>> GetEmployeesDapper(string name = null, string departmentName = null, string subDepartmentName = null);
     }
 
     /// <summary>
@@ -26,12 +26,10 @@ namespace ExampleMvcApp.Repositories
     /// </summary>
     public class EmployeesRepository : IEmployeesRepository
     {
-        private readonly ExampleDbContext database;
         private readonly IConfiguration config;
 
-        public EmployeesRepository(ExampleDbContext context, IConfiguration configuration)
+        public EmployeesRepository(IConfiguration configuration)
         {
-            database = context;
             config = configuration;
         }
 
@@ -47,60 +45,35 @@ namespace ExampleMvcApp.Repositories
         /// <returns>A list of <see cref="Employee"/>s</returns>
         public async Task<List<Employee>> GetEmployees(string name = null, string departmentName = null, string subDepartmentName = null)
         {
-            //Trim and format string and convert to empty string in cases of null
-            name = name?.Trim() ?? "";
-            departmentName = departmentName?.Trim() ?? "";
-            subDepartmentName = subDepartmentName?.Trim() ?? "";
-
-            //Sql query to execute
-            FormattableString query = $"SelectAllEmployees {name}, {departmentName}, {subDepartmentName}";
-
-            //Get the employees
-            var employees = await database.Employees.FromSqlInterpolated(query)
-                .ToListAsync();
-                
-
-            return employees;
-        }
-
-        public async Task<List<Employee>> GetEmployeesDapper(string name = null, string departmentName = null, string subDepartmentName = null)
-        {
-            string sql = config.GetConnectionString("ExampleDb");
-            using var connection = new SqlConnection(sql);
-            await connection.OpenAsync();
-            string procedure = "SelectAllEmployees";
-
-            var values = new DynamicParameters();
-            values.Add("@Name", name ?? "");
-            values.Add("@DepartmentName", departmentName ?? "");
-            values.Add("@SubDepartmentName", subDepartmentName ?? "");
-            var view = connection.Query<EmployeeAndNames>(procedure, values, commandType: CommandType.StoredProcedure).ToList();
-
-            var results = view.Select(v => new Employee()
+            using var connection = new SqlConnection(config.GetConnectionString("ExampleDb"));
+            try
             {
-                EmployeeId = v.EmployeeId,
-                SubDepartmentId = v.SubDepartmentId,
-                FirstName = v.FirstName,
-                LastName = v.LastName,
-                Bio = v.Bio,
-                ProfileImage = v.ProfileImage,
-                FbprofileLink = v.FbprofileLink,
-                TwitterProfileLink = v.TwitterProfileLink,
-                AddedDate = v.AddedDate,
-                UpdatedDate = v.UpdatedDate,
-                Deleted = v.Deleted,
-                DeletedDate = v.DeletedDate,
-                SubDepartment = new SubDepartment()
-                {
-                    SubDepartmentName = v.SubDepartmentName,
-                    Department = new Department()
-                    {
-                        DepartmentName = v.DepartmentName
-                    }
-                }
-            }).ToList();
+                await connection.OpenAsync();
 
-            return results;
+                //Define Procedure and parameters
+                string procedure = "SelectAllEmployees";
+                var values = new DynamicParameters();
+                values.Add("@Name", name?.Trim() ?? "");
+                values.Add("@DepartmentName", departmentName?.Trim() ?? "");
+                values.Add("@SubDepartmentName", subDepartmentName?.Trim() ?? "");
+
+                //Execute Procedure
+                var view = connection.Query<EmployeeAndNames>(procedure, values, commandType: CommandType.StoredProcedure).ToList();
+
+                return view.Select(v => new Employee(v)).ToList();
+            }
+            catch(Exception ex)
+            {
+                Trace.TraceError("An error occured while attempting to GetEmployees");
+                Trace.TraceError($"Exception Message: {ex.Message}");
+                Trace.TraceError($"Exception StackTrace: {ex.StackTrace}");
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
+            return new List<Employee>();
         }
     }
 }

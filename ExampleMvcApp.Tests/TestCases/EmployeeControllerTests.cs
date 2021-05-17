@@ -29,7 +29,6 @@ namespace ExampleMvcApp.Tests.TestCases
 
             //Setup the necessary services
             var services = new ServiceCollection();
-            services.AddDbContext<ExampleDbContext>(options => options.UseSqlServer(config.GetConnectionString("ExampleDb")));
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddSingleton<IConfiguration>(config);
             var serviceProvider = services.BuildServiceProvider();

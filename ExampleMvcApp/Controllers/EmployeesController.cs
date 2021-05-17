@@ -42,8 +42,7 @@ namespace ExampleMvcApp.Controllers
             [FromQuery(Name = "sub_department_name")] string subDepartmentName)
         {
             //Get the employees
-            //var employees = await _repository.GetEmployees(name, departmentName, subDepartmentName);
-            var employees = await _repository.GetEmployeesDapper(name, departmentName, subDepartmentName);
+            var employees = await _repository.GetEmployees(name, departmentName, subDepartmentName);
 
             return Ok(employees);
         }
