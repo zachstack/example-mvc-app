@@ -23,7 +23,7 @@ namespace ExampleMvcApp.Tests.TestCases
         public void Setup()
         {
             //Get Config file
-            var config = new ConfigurationBuilder()
+            IConfiguration config = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.Development.json")
                     .Build();
 
@@ -31,6 +31,7 @@ namespace ExampleMvcApp.Tests.TestCases
             var services = new ServiceCollection();
             services.AddDbContext<ExampleDbContext>(options => options.UseSqlServer(config.GetConnectionString("ExampleDb")));
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+            services.AddSingleton<IConfiguration>(config);
             var serviceProvider = services.BuildServiceProvider();
 
             //Get the needed repository
@@ -70,10 +71,12 @@ namespace ExampleMvcApp.Tests.TestCases
         /// <returns></returns>
         [Test]
         [TestCase("Andrea Arkov", null, null, ExpectedResult = 4)]
+        [TestCase("Andrea", null, null, ExpectedResult = 4)]
         [TestCase("Andrea Arkov", "Design Department", null, ExpectedResult = 4)]
         [TestCase("Andrea Arkov", null, "Web Designer", ExpectedResult = 4)]
         [TestCase("Andrea Arkov", "Design Department", "Web Designer", ExpectedResult = 4)]
         [TestCase(null, null, "Web Designer", ExpectedResult = 4)]
+        [TestCase(null, null, "Web", ExpectedResult = 4)]
         [TestCase(null, "Design Department", "Web Designer", ExpectedResult = 4)]
         public async Task<int> GetEmployees_WithSearchParameters_ShouldBeOneEmployee(string name, string departmentName, string subDepartmentName)
         {
@@ -98,6 +101,9 @@ namespace ExampleMvcApp.Tests.TestCases
         [TestCase(null, "Design Department", null, ExpectedResult = 2)]
         [TestCase(null, "Development Department", null, ExpectedResult = 2)]
         [TestCase(null, "Account Department", null, ExpectedResult = 0)]
+        [TestCase(null, "Department", null, ExpectedResult = 5)]
+        [TestCase(null, null, "Design", ExpectedResult = 2)]
+        [TestCase("on", null, null, ExpectedResult = 2)]
         public async Task<int> GetEmployees_WithSearchParameters_ShouldBeCorrectCount(string name, string departmentName, string subDepartmentName)
         {
             //Execute
@@ -116,9 +122,6 @@ namespace ExampleMvcApp.Tests.TestCases
         }
 
         [Test]
-        [TestCase(null, "Design", null)]
-        [TestCase("John", null, null)]
-        [TestCase(null, null, "Designer")]
         [TestCase(null, "Account Department", null)]
         [TestCase(null, null, "Video Animation")]
         [TestCase("Oliver Queen", null, null)]
