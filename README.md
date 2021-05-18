@@ -31,6 +31,6 @@ Similarly, for the project `ExampleMvcApp.Tests`  add a file named  `appsettings
 ```
 
 ## Running
->Note: Ensure the SQL Connection Strings are defined befor running the application.
+>Note: Ensure the SQL Connection Strings are defined before running the application.
 
-Open the solution in Visual Studio.xz Make sure `ExampleMvcApp` is the Startup Project, and start the project (F5).
+Open the solution in Visual Studio. Make sure `ExampleMvcApp` is the Startup Project, and start the project (F5).
