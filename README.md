@@ -1,6 +1,6 @@
 ﻿# Example Mvc App
 
-This is an example of a .NET Core 5.0 MVC API. Complete with a frontend MVC app and a backend RESTful API.
+This is an example of a .NET Core 5.0 MVC App. Complete with a frontend MVC app and a backend RESTful API.
 
 ## Technologies
 - [.NET Core 5.0 MVC]
@@ -10,7 +10,7 @@ This is an example of a .NET Core 5.0 MVC API. Complete with a frontend MVC app 
 - [NUnit]
 
 ## Running
-Open the Project in Visual Studio, set ExampleMvcApp as the start up project, and pres
+Open the Project in Visual Studio. Make sure `ExampleMvcApp` is the Startup Project, and start the project (F5).
 
 ## Connecting to the database
 Add a file to the `ExampleMvcApp` project named `appsettings.Development.json` with the following content with your own SQL connection string
