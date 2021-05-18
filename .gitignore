@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /appsettings.Development.json
 /ExampleMvcApp/appsettings.Development.json
 /ExampleMvcApp.Tests/appsettings.json
+/.sonarqube/conf
+/.sonarlint

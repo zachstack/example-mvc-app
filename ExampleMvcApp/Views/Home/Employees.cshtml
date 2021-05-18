@@ -30,7 +30,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-3 col-sm-5">
-                        <img class="portrait" src="~/assets/@employee.ProfileImage" />
+                        <img class="portrait" src="~/assets/@employee.ProfileImage" alt="Employee Profile" />
                         <div id="socialmedia">
                             <a href="@employee.FbprofileLink" class="fa fa-facebook"></a>
                             <a href="@employee.TwitterProfileLink" class="fa fa-twitter"></a>
@@ -48,7 +48,7 @@
         <br />
     }
 }
-@if(Model.Employees.Count == 0)
+@if (Model.Employees.Count == 0)
 {
     <span>No employees found</span>
 }
