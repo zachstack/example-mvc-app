@@ -56,8 +56,16 @@ namespace ExampleMvcApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Employees",
+                    pattern: "employees",
+                    defaults: new { controller = "Home", action = "Employees" });
+                endpoints.MapControllerRoute(
+                    name: "Privacy",
+                    pattern: "privacy",
+                    defaults: new { controller = "Home", action = "Privacy" });
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{name?}/{department_name?}/{subdepartment_name?}");
+                    pattern: "{controller=Home}/{action=Index}");
             });
         }
     }
